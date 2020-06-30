@@ -18,8 +18,14 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            buildConfigField("String","BASE_URL","\"https://www.apphusetreach.no/application/119267/\"")
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            buildConfigField("String","BASE_URL","\"https://www.apphusetreach.no/application/119267/\"")
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
