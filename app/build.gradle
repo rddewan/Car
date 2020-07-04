@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -83,8 +85,16 @@ dependencies {
     //https://github.com/airbnb/lottie-android
     implementation "com.airbnb.android:lottie:$lottie"
 
+    //https://github.com/JakeWharton/timber
+    implementation "com.jakewharton.timber:timber:$timber"
+
     //json
     implementation "com.google.code.gson:gson:$gson"
+
+    //firebase analytics
+    implementation "com.google.firebase:firebase-analytics:$firebase_analytics"
+    // firebase Crashlytics SDK
+    implementation "com.google.firebase:firebase-crashlytics:$firebase_crashlytics"
 
 
     testImplementation "junit:junit:$junit"

@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Cars</string>
     <string name="car">image_description</string>
+
+    <!-- network error -->
+    <string name="network_connection_error_title">Ouch! No Internet</string>
+    <string name="network_connection_error">Internet connection lost, please retry again</string>
+    <string name="network_default_error">Something wrong happened, please retry again</string>
+    <string name="network_internal_error">Our systems got an error, please retry again</string>
+    <string name="network_server_not_available">Our services are under maintenance, please retry after some time </string>
+    <string name="server_connection_error">Not able to connect, please retry again</string>
+    <string name="unauthorized_error">Unauthorized! please check your login detail and retry again</string>
+    <string name="duplicate_record">Record already exist</string>
+    <string name="empty_result_error">No result found</string>
 </resources>

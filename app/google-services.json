@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "622411459021",
+    "firebase_url": "https://android-challenge-248c1.firebaseio.com",
+    "project_id": "android-challenge-248c1",
+    "storage_bucket": "android-challenge-248c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622411459021:android:f2b7710cc7d0ddd7a77c84",
+        "android_client_info": {
+          "package_name": "com.sevenpeakssoftware.richarddewan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "622411459021-huucdctokl30te7al8o9km031dtbldp3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzON0YURiqN10Wao1Xy8qodTbtioA74WM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "622411459021-huucdctokl30te7al8o9km031dtbldp3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
