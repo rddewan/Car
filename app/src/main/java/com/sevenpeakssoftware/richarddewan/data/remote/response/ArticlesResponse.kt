@@ -11,5 +11,5 @@ data class ArticlesResponse(
     @SerializedName("content")
     val content: List<Content>,
     @SerializedName("serverTime")
-    val serverTime: Int
+    val serverTime: Long
 )

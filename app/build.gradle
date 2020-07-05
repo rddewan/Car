@@ -48,6 +48,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx"
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayout"
 
     //google material design
     implementation "com.google.android.material:material:$material"
@@ -81,6 +82,10 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rxjava2_adapter"
+
+    //https://github.com/bumptech/glide
+    implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
 
     //https://github.com/airbnb/lottie-android
     implementation "com.airbnb.android:lottie:$lottie"

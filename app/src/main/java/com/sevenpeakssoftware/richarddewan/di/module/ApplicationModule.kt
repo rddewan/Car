@@ -7,6 +7,7 @@ import com.sevenpeakssoftware.richarddewan.CarApplication
 import com.sevenpeakssoftware.richarddewan.data.remote.NetworkService
 import com.sevenpeakssoftware.richarddewan.data.remote.Networking
 import com.sevenpeakssoftware.richarddewan.di.qualifier.ApplicationContext
+import com.sevenpeakssoftware.richarddewan.utils.DateTimeUtil
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.RxSchedulerProvider
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider

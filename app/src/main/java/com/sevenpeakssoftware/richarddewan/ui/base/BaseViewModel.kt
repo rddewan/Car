@@ -6,6 +6,7 @@ import com.sevenpeakssoftware.richarddewan.R
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
+import timber.log.Timber
 import javax.net.ssl.HttpsURLConnection
 
 /*
@@ -43,6 +44,10 @@ abstract class BaseViewModel(
      */
     protected fun handleNetworkError(error: Throwable?) =
         error?.let {
+            //log the error with timber / send to firebase crashlytics
+            Timber.e(it)
+
+            //helper class to extract error message
             networkHelper.castToNetworkError(it).run {
                 when (status) {
                     -1 -> messageStringId.postValue(R.string.network_default_error)

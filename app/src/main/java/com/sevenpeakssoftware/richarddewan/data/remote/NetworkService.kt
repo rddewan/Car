@@ -1,6 +1,7 @@
 package com.sevenpeakssoftware.richarddewan.data.remote
 
 import com.sevenpeakssoftware.richarddewan.data.remote.response.ArticlesResponse
+import com.sevenpeakssoftware.richarddewan.data.remote.response.Content
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -11,5 +12,5 @@ interface NetworkService {
 
     @Headers(Networking.HEADER_ACCEPT)
     @GET(Endpoints.GET_ARTICLES_LIST)
-    fun getArticlesList(): Single<List<ArticlesResponse>>
+    fun getArticlesList(): Single<ArticlesResponse>
 }

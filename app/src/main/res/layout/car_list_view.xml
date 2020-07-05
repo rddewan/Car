@@ -13,12 +13,12 @@
             android:layout_height="230dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/car"
-            android:scaleType="fitStart"
+            android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/audi_q7" />
+            tools:srcCompat="@drawable/audi_q7" />
 
         <TextView
             android:id="@+id/txtTitle"

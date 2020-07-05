@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sevenpeakssoftware.richarddewan.data.repository.ArticlesRepository
 import com.sevenpeakssoftware.richarddewan.di.qualifier.ActivityContext
+import com.sevenpeakssoftware.richarddewan.di.scope.ActivityScope
 import com.sevenpeakssoftware.richarddewan.ui.base.BaseActivity
 import com.sevenpeakssoftware.richarddewan.ui.main.MainViewModel
+import com.sevenpeakssoftware.richarddewan.ui.main.adaptor.ArticleAdaptor
+import com.sevenpeakssoftware.richarddewan.utils.DateTimeUtil
 import com.sevenpeakssoftware.richarddewan.utils.ViewModelProviderFactory
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
@@ -26,6 +29,10 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     @Singleton
     @ActivityContext
     fun provideContext(): Context = activity
+
+    @Provides
+    @ActivityScope
+    fun provideArticleAdaptor(): ArticleAdaptor = ArticleAdaptor(ArrayList(),DateTimeUtil(activity))
 
     @Provides
     fun provideMainViewModel(
