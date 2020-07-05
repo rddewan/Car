@@ -10,7 +10,7 @@ import java.util.*
 @ActivityScope
 class DateTimeUtil (private val context: Context) {
 
-    fun getDateTime(time: Int): String{
+    fun getDateTime(time: Long): String{
 
         val sdfYear = SimpleDateFormat("yyyy", Locale.getDefault())
         val postYear = sdfYear.format(time)

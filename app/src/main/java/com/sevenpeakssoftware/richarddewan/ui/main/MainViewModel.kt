@@ -1,13 +1,14 @@
 package com.sevenpeakssoftware.richarddewan.ui.main
 
 import androidx.lifecycle.MutableLiveData
-import com.sevenpeakssoftware.richarddewan.data.remote.response.ArticlesResponse
+import com.sevenpeakssoftware.richarddewan.data.local.entity.ArticleEntity
 import com.sevenpeakssoftware.richarddewan.data.remote.response.Content
 import com.sevenpeakssoftware.richarddewan.data.repository.ArticlesRepository
 import com.sevenpeakssoftware.richarddewan.ui.base.BaseViewModel
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
+import timber.log.Timber
 
 class MainViewModel(
     schedulerProvider: SchedulerProvider,
@@ -27,11 +28,11 @@ class MainViewModel(
     /*
     get the article from api
      */
-    fun getArticles(){
+    fun getArticles() {
         isLoading.value = true
-        if (checkNetworkConnectionWithMessage()){
+        if (checkNetworkConnectionWithMessage()) {
             compositeDisposable.add(
-                articlesRepository.getArticles()
+                articlesRepository.getApiArticles()
                     .map {
                         articleList.clear()
                         it.content
@@ -39,11 +40,14 @@ class MainViewModel(
                     .flattenAsObservable {
                         it
                     }
+                    .concatMapSingle {
+                        articleList.add(it)
+                        articlesRepository.insertOrUpdate(newArticleEntity(it))
+                    }
                     .subscribeOn(schedulerProvider.io())
                     .subscribe(
                         {
-                            articleList.add(it)
-
+                           Timber.d(it.toString())
                         },
                         {
                             isLoading.postValue(false)
@@ -56,10 +60,55 @@ class MainViewModel(
                         }
                     )
             )
-        }
-        else {
+        } else {
             isLoading.value = false
+            getDbArticles()
         }
 
     }
+
+    /*
+    get articles from local db
+     */
+    private fun getDbArticles() {
+        isLoading.value = true
+        compositeDisposable.add(
+            articlesRepository.getDbArticles()
+                .flattenAsObservable {
+                    articleList.clear()
+                    it
+                }
+                .subscribeOn(schedulerProvider.io())
+                .subscribe(
+                    {
+                        articleList.add(
+                            Content(it.articleId, it.title, it.ingress, it.image, it.created)
+                        )
+
+                    },
+                    {
+                        isLoading.postValue(false)
+                        handleNetworkError(it)
+                    },
+                    {
+                        articlesResponse.postValue(articleList)
+                        isLoading.postValue(false)
+
+                    }
+                )
+        )
+    }
+
+    /*
+    return Article Entity
+     */
+    private fun newArticleEntity(content: Content): ArticleEntity =
+        ArticleEntity(
+            articleId = content.id,
+            title = content.title,
+            ingress = content.ingress,
+            image = content.image,
+            created = content.created
+        )
+
 }

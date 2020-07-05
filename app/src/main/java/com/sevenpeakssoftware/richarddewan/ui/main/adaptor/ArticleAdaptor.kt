@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.sevenpeakssoftware.richarddewan.R
 import com.sevenpeakssoftware.richarddewan.data.remote.response.Content
 import com.sevenpeakssoftware.richarddewan.di.scope.ActivityScope
@@ -43,6 +45,7 @@ class ArticleAdaptor(
 
             Glide.with(itemView)
                 .load(content.image)
+                .apply(RequestOptions().signature(ObjectKey(System.currentTimeMillis())))
                 .placeholder(R.drawable.ic_placeholder)
                 .into(itemView.carImageView)
 
