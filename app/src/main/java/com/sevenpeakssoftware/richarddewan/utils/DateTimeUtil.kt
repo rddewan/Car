@@ -13,19 +13,19 @@ class DateTimeUtil (private val context: Context) {
     fun getDateTime(time: Long): String{
 
         val sdfYear = SimpleDateFormat("yyyy", Locale.getDefault())
-        val postYear = sdfYear.format(time)
+        val postYear = sdfYear.format(Date(time*1000L))
         val currentYear = sdfYear.format(Date())
 
         val oldPostDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val currentYearPostDateFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
 
         val postDate = if (postYear == currentYear){
-            currentYearPostDateFormat.format(time)
+            currentYearPostDateFormat.format(Date(time*1000L))
         } else {
-            oldPostDateFormat.format(time)
+            oldPostDateFormat.format(Date(time*1000L))
         }
         val timeFormat = DateFormat.getTimeFormat(context)
-        val postTime = timeFormat.format(time)
+        val postTime = timeFormat.format(Date(time*1000L))
 
         return "$postDate,${postTime.toUpperCase(Locale.getDefault())}"
     }

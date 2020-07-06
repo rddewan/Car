@@ -45,7 +45,7 @@ class ArticleAdaptor(
 
             Glide.with(itemView)
                 .load(content.image)
-                .apply(RequestOptions().signature(ObjectKey(System.currentTimeMillis())))
+                .apply(RequestOptions().signature(ObjectKey(content.changed)))
                 .placeholder(R.drawable.ic_placeholder)
                 .into(itemView.carImageView)
 

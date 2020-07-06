@@ -32,4 +32,11 @@ class CarApplication: Application() {
     private fun setupLogging(){
         if (BuildConfig.DEBUG) Timber.plant(DebugTree()) else  Timber.plant(ReleaseTree())
     }
+
+    /*
+    replace the component with test specific component
+     */
+    fun setComponent(applicationComponent: ApplicationComponent){
+        this.applicationComponent = applicationComponent
+    }
 }

@@ -3,6 +3,7 @@ package com.sevenpeakssoftware.richarddewan.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 
 @Entity(tableName = "articles")
@@ -19,5 +20,7 @@ data class ArticleEntity(
     @ColumnInfo(name = "image")
     val image: String,
     @ColumnInfo(name = "created")
-    val created: Long
+    val created: Date,
+    @ColumnInfo(name = "changed")
+    val changed: Date
 )

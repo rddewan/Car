@@ -4,6 +4,7 @@ package com.sevenpeakssoftware.richarddewan.data.remote.response
 import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
 
+
 @Keep
 data class Content(
     @SerializedName("id")
@@ -15,6 +16,8 @@ data class Content(
     @SerializedName("image")
     val image: String,
     @SerializedName("created")
-    val created: Long
+    val created: Long,
+    @SerializedName("changed")
+    val changed: Long
 
 )

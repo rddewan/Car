@@ -9,6 +9,8 @@ import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainViewModel(
     schedulerProvider: SchedulerProvider,
@@ -19,7 +21,7 @@ class MainViewModel(
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
     val articlesResponse: MutableLiveData<ArrayList<Content>> = MutableLiveData()
-    private val articleList = ArrayList<Content>()
+    var articleList = ArrayList<Content>()
 
     override fun onCreate() {
         getArticles()
@@ -40,14 +42,10 @@ class MainViewModel(
                     .flattenAsObservable {
                         it
                     }
-                    .concatMapSingle {
-                        articleList.add(it)
-                        articlesRepository.insertOrUpdate(newArticleEntity(it))
-                    }
                     .subscribeOn(schedulerProvider.io())
                     .subscribe(
                         {
-                           Timber.d(it.toString())
+                            articleList.add(it)
                         },
                         {
                             isLoading.postValue(false)
@@ -55,8 +53,12 @@ class MainViewModel(
                         },
                         {
                             articlesResponse.postValue(articleList)
-                            isLoading.postValue(false)
+                            //loop through array list and insert to local db
+                            articleList.forEach{
+                                articlesRepository.insertOrUpdate(newArticleEntity(it))
+                            }
 
+                            isLoading.postValue(false)
                         }
                     )
             )
@@ -82,7 +84,7 @@ class MainViewModel(
                 .subscribe(
                     {
                         articleList.add(
-                            Content(it.articleId, it.title, it.ingress, it.image, it.created)
+                            Content(it.articleId, it.title, it.ingress, it.image, it.created.time,it.changed.time)
                         )
 
                     },
@@ -108,7 +110,8 @@ class MainViewModel(
             title = content.title,
             ingress = content.ingress,
             image = content.image,
-            created = content.created
+            created = Date(content.created),
+            changed = Date(content.changed)
         )
 
 }
