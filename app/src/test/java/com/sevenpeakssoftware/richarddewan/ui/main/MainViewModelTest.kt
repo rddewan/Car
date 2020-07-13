@@ -2,8 +2,8 @@ package com.sevenpeakssoftware.richarddewan.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.sevenpeakssoftware.richarddewan.R
-import com.sevenpeakssoftware.richarddewan.data.local.entity.ArticleEntity
-import com.sevenpeakssoftware.richarddewan.data.remote.response.ArticlesResponse
+import com.sevenpeakssoftware.richarddewan.Utils.TestUtil
+import com.sevenpeakssoftware.richarddewan.Utils.TestUtil.content1
 import com.sevenpeakssoftware.richarddewan.data.remote.response.Content
 import com.sevenpeakssoftware.richarddewan.data.repository.ArticlesRepository
 import com.sevenpeakssoftware.richarddewan.utils.getOrAwaitValue
@@ -14,14 +14,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.TestScheduler
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
-import java.util.*
 
 
 @RunWith(MockitoJUnitRunner::class)
@@ -55,32 +56,22 @@ class MainViewModelTest {
         )
     }
 
+    /*
+    when no internet connection get articles from local db
+     */
     @Test
-    fun givenNoInternet_return_network_error_get_data_from_local_database(){
-        val article1 = ArticleEntity(1,1001,"title1","ingress1","image1",
-            Date(1511968425),Date(1511968425))
-        val article2 = ArticleEntity(2,1002,"title2","ingress2","image2",
-            Date(1511968425),Date(1511968425))
-        val article3 = ArticleEntity(3,1003,"title3","ingress3","image3",
-            Date(1511968425),Date(1511968425))
-        val article4 = ArticleEntity(4,1004,"title4","ingress4","image4",
-            Date(1511968425),Date(1511968425))
+    fun givenNoInternet_return_network_error_return_article_from_local_database(){
 
-        val content1 = Content(1001,"title1","ingress1","image1",
-            1511968425,1511968425)
-        val content2 = Content(1002,"title2","ingress2","image2",
-            1511968425,1511968425)
-        val content3 = Content(1003,"title3","ingress3","image3",
-            1511968425,1511968425)
-        val content4 = Content(1004,"title4","ingress4","image4",
-            1511968425,1511968425)
+        val articles = TestUtil.articleList
+        val response = TestUtil.response
 
         doReturn(false)
             .`when`(networkHelper)
             .isNetworkConnected()
 
-        doReturn(Single.just(listOf(article1,article2,article3,article4)))
-            .`when`(articlesRepository).getDbArticles()
+        doReturn(Single.just(articles))
+            .`when`(articlesRepository)
+            .getDbArticles()
 
         mainViewModel.getArticles()
         testScheduler.triggerActions()
@@ -91,25 +82,24 @@ class MainViewModelTest {
         assertThat(mainViewModel.isLoading.getOrAwaitValue(),
         `is`(false))
 
-        assertThat(mainViewModel.articlesResponse.getOrAwaitValue(),
-        `is`(arrayListOf(content1,content2,content3,content4)))
+        assertEquals(mainViewModel.articlesResponse.getOrAwaitValue()[0].title, response[0].title)
+
+        assertEquals(response.size, mainViewModel.articlesResponse.getOrAwaitValue().size)
+        println("articlesResponse size : ${mainViewModel.articlesResponse.getOrAwaitValue().size}")
+        assertEquals(articles.size,mainViewModel.articleList.size)
+        println("articleList size : ${mainViewModel.articleList.size}")
 
     }
 
+    /*
+    given internet connection return content from api
+    and verify articlesRepository.insertOrUpdate(article) is called
+     */
     @Test
-    fun givenInternet_return_api_data(){
-        val article1 = ArticleEntity(1,1001,"title1","ingress1","image1",
-            Date(1511968425),Date(1511968425))
+    fun givenInternet_return_api_response(){
 
-        val content1 = Content(1001,"title1","ingress1","image1",
-            1511968425,1511968425)
-        val content2 = Content(1002,"title2","ingress2","image2",
-            1511968425,1511968425)
-        val content3 = Content(1003,"title3","ingress3","image3",
-            1511968425,1511968425)
-        val content4 = Content(1004,"title4","ingress4","image4",
-            1511968425,1511968425)
-        val response = ArticlesResponse("status", listOf(content1,content2,content3,content4),1511968425)
+
+        val response = TestUtil.articlesResponse
 
         doReturn(true)
             .`when`(networkHelper)
@@ -119,11 +109,9 @@ class MainViewModelTest {
             .`when`(articlesRepository)
             .getApiArticles()
 
-
-
-        mainViewModel.articlesResponse.value = arrayListOf(content1,content2,content3,content4)
-        mainViewModel.articleList = arrayListOf(content1,content2,content3,content4)
-
+        doReturn(Single.just(1L))
+            .`when`(articlesRepository)
+            .insertOrUpdate(mainViewModel.newArticleEntity(content1))
 
         mainViewModel.onCreate()
         testScheduler.triggerActions()
@@ -131,12 +119,29 @@ class MainViewModelTest {
         assertThat(mainViewModel.isLoading.getOrAwaitValue(),
             `is`(false))
 
-        assertThat(4,`is`(mainViewModel.articleList.size))
+        val article = mainViewModel.newArticleEntity(content1)
+
+        verify(articlesRepository).insertOrUpdate(article)
+
+        assertThat(response.content.size,`is`(mainViewModel.articleList.size))
 
         assertThat(mainViewModel.articlesResponse.getOrAwaitValue().size,
-            `is`(4))
+            `is`(response.content.size))
+
+    }
 
 
+    /*
+    given content should return article
+     */
+    @Test
+    fun give_content_return_article(){
+
+        val article = mainViewModel.newArticleEntity(content1)
+        assertEquals(content1.id, article.articleId)
+        assertEquals(content1.title,article.title)
+        assertEquals(content1.ingress,article.ingress)
+        assertEquals(content1.image, article.image)
 
     }
 

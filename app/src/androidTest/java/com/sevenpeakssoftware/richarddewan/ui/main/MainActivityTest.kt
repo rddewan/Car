@@ -10,7 +10,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.sevenpeakssoftware.richarddewan.R
 import com.sevenpeakssoftware.richarddewan.utils.RecyclerViewMatcher.atPositionOnView
-
 import com.sevenpeakssoftware.richarddewan.di.TestComponentRule
 import org.hamcrest.Matchers.not
 import org.junit.Before

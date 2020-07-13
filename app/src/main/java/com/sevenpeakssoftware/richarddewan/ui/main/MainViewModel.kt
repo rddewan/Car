@@ -8,7 +8,6 @@ import com.sevenpeakssoftware.richarddewan.ui.base.BaseViewModel
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -72,7 +71,7 @@ class MainViewModel(
     /*
     get articles from local db
      */
-    private fun getDbArticles() {
+     private fun getDbArticles() {
         isLoading.value = true
         compositeDisposable.add(
             articlesRepository.getDbArticles()
@@ -104,7 +103,7 @@ class MainViewModel(
     /*
     return Article Entity
      */
-    private fun newArticleEntity(content: Content): ArticleEntity =
+    fun newArticleEntity(content: Content): ArticleEntity =
         ArticleEntity(
             articleId = content.id,
             title = content.title,

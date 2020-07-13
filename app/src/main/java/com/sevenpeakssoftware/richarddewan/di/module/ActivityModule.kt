@@ -16,6 +16,7 @@ import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import java.io.File
 import javax.inject.Singleton
 
 
