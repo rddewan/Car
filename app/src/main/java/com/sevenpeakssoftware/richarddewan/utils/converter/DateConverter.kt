@@ -2,6 +2,7 @@ package com.sevenpeakssoftware.richarddewan.utils.converter
 
 import androidx.room.TypeConverter
 import java.util.*
+import kotlin.time.milliseconds
 
 class DateConverter {
 
