@@ -17,4 +17,5 @@ class DateConverter {
      */
     @TypeConverter
     fun fromDate(date: Date?) = date?.time
+
 }

@@ -7,9 +7,9 @@ import androidx.annotation.Keep
 @Keep
 data class ArticlesResponse(
     @SerializedName("status")
-    val status: String,
+    val status: String?,
     @SerializedName("content")
-    val content: List<Content>,
+    val content: List<Content>?,
     @SerializedName("serverTime")
-    val serverTime: Long
+    val serverTime: Long?
 )

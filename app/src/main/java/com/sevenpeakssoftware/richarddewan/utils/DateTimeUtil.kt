@@ -10,22 +10,28 @@ import java.util.*
 @ActivityScope
 class DateTimeUtil (private val context: Context) {
 
-    fun getDateTime(time: Long): String{
+    fun getDateTime(date: Date): String{
 
-        val sdfYear = SimpleDateFormat("yyyy", Locale.getDefault())
-        val postYear = sdfYear.format(Date(time*1000L))
-        val currentYear = sdfYear.format(Date())
+        val postCalender = Calendar.getInstance().apply {
+            time = date
+        }
+        val currentCalender = Calendar.getInstance().apply {
+            time = Date()
+        }
+        val postYear = postCalender.get(Calendar.YEAR)
+        val currentYear = currentCalender.get(Calendar.YEAR)
+
 
         val oldPostDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
         val currentYearPostDateFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
 
         val postDate = if (postYear == currentYear){
-            currentYearPostDateFormat.format(Date(time*1000L))
+            currentYearPostDateFormat.format(date)
         } else {
-            oldPostDateFormat.format(Date(time*1000L))
+            oldPostDateFormat.format(date)
         }
         val timeFormat = DateFormat.getTimeFormat(context)
-        val postTime = timeFormat.format(Date(time*1000L))
+        val postTime = timeFormat.format(date)
 
         return "$postDate,${postTime.toUpperCase(Locale.getDefault())}"
     }

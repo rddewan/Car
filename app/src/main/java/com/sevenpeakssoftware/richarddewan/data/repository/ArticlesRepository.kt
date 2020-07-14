@@ -3,6 +3,8 @@ package com.sevenpeakssoftware.richarddewan.data.repository
 import com.sevenpeakssoftware.richarddewan.data.local.db.DatabaseService
 import com.sevenpeakssoftware.richarddewan.data.local.entity.ArticleEntity
 import com.sevenpeakssoftware.richarddewan.data.remote.NetworkService
+import io.reactivex.Observable
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,8 +16,27 @@ class ArticlesRepository @Inject constructor(
 ) {
 
     fun getApiArticles() = networkService.getArticlesList()
+        .map {
+            it.content
+        }
+        .flatMap {
+            Observable.fromIterable(it)
+                .map {content ->
+                    ArticleEntity(
+                        articleId = content.id,
+                        title = content.title,
+                        ingress = content.ingress,
+                        image = content.image,
+                        created =  Date(content.created * 1000L),
+                        changed = Date(content.changed * 1000L)
+                    )
+                }
+                .toList()
+        }
 
-    fun insertOrUpdate(articleEntity: ArticleEntity) = databaseService.articleDao().insertOrUpdate(articleEntity)
+
+    fun insertMany(articleList: List<ArticleEntity>) =
+        databaseService.articleDao().insertMany(articleList)
 
     fun getDbArticles() = databaseService.articleDao().getArticles()
 }
