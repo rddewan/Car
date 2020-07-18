@@ -1,10 +1,10 @@
 package com.sevenpeakssoftware.richarddewan.ui.main.adaptor
 
-
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.ListPreloader
@@ -16,8 +16,6 @@ import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.sevenpeakssoftware.richarddewan.R
 import com.sevenpeakssoftware.richarddewan.data.local.entity.ArticleEntity
 import com.sevenpeakssoftware.richarddewan.utils.DateTimeUtil
-import kotlinx.android.synthetic.main.car_list_view.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -54,6 +52,11 @@ class ArticleAdaptor(
         private val viewPreloadSizeProvider: ViewPreloadSizeProvider<String>
     ) : RecyclerView.ViewHolder(itemView) {
 
+        private var mTitle: TextView = itemView.findViewById(R.id.txtTitle)
+        private var mDate: TextView = itemView.findViewById(R.id.txtDate)
+        private var mIngress: TextView = itemView.findViewById(R.id.txtIngress)
+        private var mCarImageView: ImageView = itemView.findViewById(R.id.carImageView)
+
         fun onBind(article: ArticleEntity) {
 
             val requestOptions = RequestOptions()
@@ -63,13 +66,13 @@ class ArticleAdaptor(
                 .load(article.image)
                 .placeholder(R.drawable.ic_placeholder)
                 .apply(requestOptions)
-                .into(itemView.carImageView)
+                .into(mCarImageView)
 
-            itemView.txtTitle.text = article.title
-            itemView.txtDate.text = dateTimeUtil.getDateTime(article.created)
-            itemView.txtIngress.text = article.ingress
+            mTitle.text = article.title
+            mDate.text = dateTimeUtil.getDateTime(article.created)
+            mIngress.text = article.ingress
 
-            viewPreloadSizeProvider.setView(itemView.carImageView)
+            viewPreloadSizeProvider.setView(mCarImageView)
 
         }
     }
