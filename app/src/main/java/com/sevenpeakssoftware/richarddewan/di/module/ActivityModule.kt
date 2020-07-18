@@ -31,9 +31,6 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     @ActivityContext
     fun provideContext(): Context = activity
 
-    @Provides
-    @ActivityScope
-    fun provideArticleAdaptor(): ArticleAdaptor = ArticleAdaptor(ArrayList(),DateTimeUtil(activity))
 
     @Provides
     fun provideMainViewModel(
