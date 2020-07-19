@@ -25,7 +25,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity<MainViewModel>() {
 
     @Inject
-    lateinit var mLinearLayoutManager: LinearLayoutManager
+    lateinit var linearLayoutManager: LinearLayoutManager
 
     private lateinit var mAdaptor: ArticleAdaptor
     private lateinit var mRecyclerView: RecyclerView
@@ -92,7 +92,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         )
 
         mRecyclerView.apply {
-            layoutManager = mLinearLayoutManager
+            layoutManager = linearLayoutManager
             adapter = mAdaptor
             addOnScrollListener(mRvPreLoader)
         }

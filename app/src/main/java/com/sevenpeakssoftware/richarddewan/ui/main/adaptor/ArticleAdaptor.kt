@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 
 
 class ArticleAdaptor(
-    private var mList: ArrayList<ArticleEntity>,
+    private var mList: List<ArticleEntity>,
     private var dateTimeUtil: DateTimeUtil,
     private var viewPreloadSizeProvider: ViewPreloadSizeProvider<String>
 ) : RecyclerView.Adapter<ArticleAdaptor.ArticleViewHolder>(),
@@ -28,7 +28,7 @@ class ArticleAdaptor(
 
     private lateinit var mView: View
 
-    fun setArticle(articleList: ArrayList<ArticleEntity>) {
+    fun setArticle(articleList: List<ArticleEntity>) {
         mList = articleList
         notifyDataSetChanged()
     }
@@ -59,6 +59,9 @@ class ArticleAdaptor(
 
         fun onBind(article: ArticleEntity) {
 
+            /*
+            configure Glide cache option
+             */
             val requestOptions = RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
 

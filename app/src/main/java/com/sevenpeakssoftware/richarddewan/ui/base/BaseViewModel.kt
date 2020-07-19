@@ -42,7 +42,7 @@ abstract class BaseViewModel(
     /*
     handle network error
      */
-    protected fun handleNetworkError(error: Throwable?) =
+    protected fun handleException(error: Throwable?) =
         error?.let {
             //log the error with timber / send to firebase crashlytics
             Timber.e(it)

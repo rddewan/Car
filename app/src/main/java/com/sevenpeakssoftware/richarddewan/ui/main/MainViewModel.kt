@@ -8,9 +8,8 @@ import com.sevenpeakssoftware.richarddewan.ui.base.BaseViewModel
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
 import com.sevenpeakssoftware.richarddewan.utils.rx.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class MainViewModel(
     schedulerProvider: SchedulerProvider,
@@ -20,8 +19,7 @@ class MainViewModel(
 ) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData()
-    val articlesResponse: MutableLiveData<ArrayList<ArticleEntity>> = MutableLiveData()
-    var articleList = ArrayList<Content>()
+    val articlesResponse: MutableLiveData<List<ArticleEntity>> = MutableLiveData()
 
     override fun onCreate() {
         getArticles()
@@ -39,14 +37,18 @@ class MainViewModel(
                     .subscribeOn(schedulerProvider.io())
                     .subscribe(
                         {
+                            /*
+                            do in background thread as we need to insert record to room db
+                             */
                             isLoading.postValue(false)
                             //update live data
-                            articlesResponse.postValue(it as ArrayList<ArticleEntity>?)
+                            articlesResponse.postValue(it)
                             //insert to local db
                             articlesRepository.insertMany(it)
                         },
                         {
                             isLoading.postValue(false)
+                            handleException(it)
                         }
                     )
 
@@ -68,16 +70,16 @@ class MainViewModel(
         compositeDisposable.add(
             articlesRepository.getDbArticles()
                 .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.main())
                 .subscribe(
                     {
-                        isLoading.postValue(false)
-
-                        articlesResponse.postValue(it as ArrayList<ArticleEntity>?)
+                        isLoading.value = false
+                        articlesResponse.value = it
                     },
                     {
-                        isLoading.postValue(false)
+                        isLoading.value = false
 
-                        handleNetworkError(it)
+                        handleException(it)
                     }
 
                 )
