@@ -2,9 +2,8 @@ package com.sevenpeakssoftware.richarddewan.ui.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.sevenpeakssoftware.richarddewan.R
-import com.sevenpeakssoftware.richarddewan.Utils.TestUtil
-import com.sevenpeakssoftware.richarddewan.Utils.TestUtil.content1
-import com.sevenpeakssoftware.richarddewan.data.remote.response.Content
+import com.sevenpeakssoftware.richarddewan.TestUtils.TestUtil
+import com.sevenpeakssoftware.richarddewan.TestUtils.TestUtil.content1
 import com.sevenpeakssoftware.richarddewan.data.repository.ArticlesRepository
 import com.sevenpeakssoftware.richarddewan.utils.getOrAwaitValue
 import com.sevenpeakssoftware.richarddewan.utils.network.NetworkHelper
@@ -21,7 +20,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
-import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 
@@ -86,8 +84,7 @@ class MainViewModelTest {
 
         assertEquals(response.size, mainViewModel.articlesResponse.getOrAwaitValue().size)
         println("articlesResponse size : ${mainViewModel.articlesResponse.getOrAwaitValue().size}")
-        assertEquals(articles.size,mainViewModel.articleList.size)
-        println("articleList size : ${mainViewModel.articleList.size}")
+
 
     }
 
@@ -109,9 +106,6 @@ class MainViewModelTest {
             .`when`(articlesRepository)
             .getApiArticles()
 
-        doReturn(Single.just(1L))
-            .`when`(articlesRepository)
-            .insertOrUpdate(mainViewModel.newArticleEntity(content1))
 
         mainViewModel.onCreate()
         testScheduler.triggerActions()
@@ -121,12 +115,7 @@ class MainViewModelTest {
 
         val article = mainViewModel.newArticleEntity(content1)
 
-        verify(articlesRepository).insertOrUpdate(article)
 
-        assertThat(response.content.size,`is`(mainViewModel.articleList.size))
-
-        assertThat(mainViewModel.articlesResponse.getOrAwaitValue().size,
-            `is`(response.content.size))
 
     }
 

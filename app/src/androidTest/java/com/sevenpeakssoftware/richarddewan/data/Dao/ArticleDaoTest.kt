@@ -1,7 +1,7 @@
 package com.sevenpeakssoftware.richarddewan.data.Dao
 
 
-import com.sevenpeakssoftware.richarddewan.Utils.TestUtil
+import com.sevenpeakssoftware.richarddewan.TestUtils.TestUtil
 import com.sevenpeakssoftware.richarddewan.data.db.DatabaseServiceTest
 import junit.framework.Assert.assertEquals
 import org.junit.Test

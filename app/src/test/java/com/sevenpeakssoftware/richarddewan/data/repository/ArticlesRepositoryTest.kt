@@ -1,13 +1,13 @@
 package com.sevenpeakssoftware.richarddewan.data.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.sevenpeakssoftware.richarddewan.Utils.TestUtil
+import com.sevenpeakssoftware.richarddewan.TestUtils.TestUtil
 import com.sevenpeakssoftware.richarddewan.data.local.dao.ArticleDao
 import com.sevenpeakssoftware.richarddewan.data.local.db.DatabaseService
+import com.sevenpeakssoftware.richarddewan.data.local.entity.ArticleEntity
 import com.sevenpeakssoftware.richarddewan.data.remote.NetworkService
-import com.sevenpeakssoftware.richarddewan.data.remote.response.ArticlesResponse
+
 import io.reactivex.Single
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,9 +43,10 @@ class ArticlesRepositoryTest {
     when getArticlesList() fun is called it should call getArticlesList() from networkService
      */
     @Test
-    fun getApiArticles_request_getArticlesList(){
+    fun getArticlesList(){
+        val response = TestUtil.articlesResponse
 
-        doReturn(Single.just(ArticlesResponse("status", listOf(),12345678)))
+        doReturn(Single.just(response))
             .`when`(networkService)
             .getArticlesList()
 
@@ -55,48 +56,39 @@ class ArticlesRepositoryTest {
     }
 
    /*
-   when articlesRepository.insertOrUpdate() fun is called
-   verify that articleDao.insertOrUpdate() is called
+   when articlesRepository.getApiArticles() fun is called should return ArticleEntity
     */
-
     @Test
-    fun when_articlesRepository_insertOrUpdate_called_verify_articleDao_insertOrUpdate_is_called(){
-        val articleEntity = TestUtil.articleEntity
+    fun when_getApiArticles_return_articleEntity(){
+        val response  = TestUtil.articlesResponse
 
-        doReturn(articleDao)
-            .`when`(databaseService)
-            .articleDao()
+        doReturn(Single.just(response))
+            .`when`(networkService)
+            .getArticlesList()
 
-        doReturn(Single.just(1))
-            .`when`(articleDao)
-            .insertOrUpdate(articleEntity)
-
-
-        articlesRepository.insertOrUpdate(articleEntity)
-        //verify articleDao.insertOrUpdate was called
-        verify(articleDao).insertOrUpdate(articleEntity)
-        println("Repository insertOrUpdate called success")
-
+        val entity = articlesRepository.getApiArticles()
+        println(entity.blockingGet())
 
     }
 
     /*
-   when articlesRepository.insertOrUpdate() fun is called
-   return 1L as inserted row id
+   when articlesRepository.insertMany() fun is called
+   return list of inserted row
     */
     @Test
-    fun when_articlesRepository_insertOrUpdate_return_long_one(){
-        val articleEntity = TestUtil.articleEntity
+    fun when_insertMany_return_list_of_row_number(){
+        val articleList = TestUtil.articleList
 
         doReturn(articleDao)
             .`when`(databaseService).articleDao()
 
-        doReturn(Single.just(1L))
-            .`when`(articleDao).insertOrUpdate(articleEntity)
+        doReturn(listOf<Long>(1,2,3,4))
+            .`when`(articleDao)
+            .insertMany(articleList)
 
-        val result = articlesRepository.insertOrUpdate(articleEntity).blockingGet()
-        assertEquals(1L,result)
-        println("Repository insertOrUpdate insert success $result")
+
+        val result = articlesRepository.insertMany(articleList)
+        println(result.toString())
 
     }
 
@@ -105,8 +97,7 @@ class ArticlesRepositoryTest {
   return Articles list from local db as inserted row id
    */
     @Test
-    fun when_articlesRepository_getDbArticles_return_articles_list_from_db(){
-
+    fun when_getDbArticles_return_articles_list_from_db(){
         val articleList = TestUtil.articleList
 
         doReturn(articleDao)
@@ -116,8 +107,8 @@ class ArticlesRepositoryTest {
             .`when`(articleDao).getArticles()
 
         val result = articlesRepository.getDbArticles().blockingGet()
-        assertEquals(4,result.size)
-        println("Repository getDbArticles  $result")
+        println(result)
+
 
     }
 }

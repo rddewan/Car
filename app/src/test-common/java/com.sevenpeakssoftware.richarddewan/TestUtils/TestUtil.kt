@@ -1,4 +1,4 @@
-package com.sevenpeakssoftware.richarddewan.Utils
+package com.sevenpeakssoftware.richarddewan.TestUtils
 
 import com.sevenpeakssoftware.richarddewan.data.local.entity.ArticleEntity
 import com.sevenpeakssoftware.richarddewan.data.remote.response.ArticlesResponse
